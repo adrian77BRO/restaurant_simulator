@@ -13,11 +13,11 @@ public class SpriteCaminante {
     private static final long ANIMATION_DELAY =  100_000_000;
 
     public SpriteCaminante() {
-        image1 = new Image(getClass().getResource("/org/example/assets/mesero/2.png").toExternalForm());
-        image2 = new Image(getClass().getResource("/org/example/assets/mesero/3.png").toExternalForm());
+        image1 = new Image(getClass().getResource("/org/example/assets/cliente/2.png").toExternalForm());
+        image2 = new Image(getClass().getResource("/org/example/assets/cliente/3.png").toExternalForm());
         imageView = new ImageView(image1);
-        imageView.setFitWidth(40);
-        imageView.setFitHeight(40);
+        imageView.setFitWidth(50);
+        imageView.setFitHeight(50);
     }
 
     public void iniciarAnimacion() {

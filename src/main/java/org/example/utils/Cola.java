@@ -13,8 +13,8 @@ import java.util.Queue;
 
 public class Cola {
 
-    private static final double VELOCIDAD = 2; 
-    private static Queue<SpriteCaminante> colaSprites = new LinkedList<>(); 
+    private static final double VELOCIDAD = 2; // Velocidad del movimiento
+    private static Queue<SpriteCaminante> colaSprites = new LinkedList<>(); // Cola para almacenar los sprites
 
     public static void moverSprite(ImageView sprite, double destinoX, double destinoY) {
         new AnimationTimer() {
@@ -58,7 +58,7 @@ public class Cola {
                     Duration.millis(i * delayEntreSprites),
                     e -> {
                         SpriteCaminante sprite = new SpriteCaminante();
-                        sprite.iniciarAnimacion();
+                        sprite.iniciarAnimacion(); // Activar animación si es necesario
 
                         sprite.getImageView().setX(posicionInicialX);
                         sprite.getImageView().setY(posicionInicialY);

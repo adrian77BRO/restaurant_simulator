@@ -13,7 +13,7 @@ public class ComedorView {
     public ComedorView() {
         view = new VBox();
         view.setPrefSize(700, 450);
-        view.setStyle("-fx-background-color: lightgreen;");
+        view.setStyle("-fx-background-color: red;");
 
         // Crear el contenedor de mesas con filas y columnas
         contenedorMesas = new ContenedorMesas(5, 8);

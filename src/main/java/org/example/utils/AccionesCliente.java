@@ -22,7 +22,7 @@ public class AccionesCliente {
 
         Random rand = new Random();
         Mesa mesaElegida = mesas.get(rand.nextInt(mesas.size()));
-        double destinoX = mesaElegida.getMesa().getLayoutX()+35;
+        double destinoX = mesaElegida.getMesa().getLayoutX()+100;
         double destinoY = mesaElegida.getMesa().getLayoutY();
         moverSprite(clienteView, destinoX, destinoY);
     }

@@ -2,7 +2,6 @@ package org.example.components.comedor;
 
 import javafx.geometry.Insets;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,10 +23,10 @@ public class ContenedorMesas {
                 Mesa mesa = new Mesa();
                 grid.add(mesa.getMesa(), col, row);
 
-                // Establecer las coordenadas de cada mesa y guardarlas en la lista
-                mesa.setX(col * 100);  // Ajustar como desees
-                mesa.setY(row * 100);  // Ajustar como desees
-                mesas.add(mesa);  // Agregar la mesa a la lista
+        
+                mesa.setX(col * 100); 
+                mesa.setY(row * 100); 
+                mesas.add(mesa);
             }
         }
     }

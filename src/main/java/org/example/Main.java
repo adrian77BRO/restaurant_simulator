@@ -4,12 +4,13 @@ import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.dsl.FXGL;
 import javafx.animation.PauseTransition;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import org.example.utils.Cola;
-import org.example.utils.AccionesCliente;  // Asegúrate de importar AccionesCliente
+import org.example.utils.AccionesCliente;
 import org.example.views.RecepcionView;
 import org.example.views.ComedorView;
 import org.example.views.CocinaView;
@@ -32,7 +33,6 @@ public class Main extends GameApplication {
         HBox root = new HBox();
         root.setPrefSize(1000, 600);
 
-        // Crear las vistas
         ComedorView comedorView = new ComedorView();
         root.getChildren().addAll(
                 new RecepcionView().getView(),
@@ -42,8 +42,15 @@ public class Main extends GameApplication {
 
         FXGL.getGameScene().addUINode(root);
 
-        // Funciones de la cola
         Cola.iniciarCaminarEnCadena(10, 30, 450, 50, 500);
+         Rectangle rectangulo = new Rectangle(1000, 150);
+         rectangulo.setFill(Color.BLACK);
+
+         rectangulo.setLayoutX(0);
+         rectangulo.setLayoutY(450);
+
+         FXGL.getGameScene().addUINode(rectangulo);
+         
 
         Button btnEntrar = new Button("Entrar");
         btnEntrar.setLayoutX(50);
@@ -60,6 +67,28 @@ public class Main extends GameApplication {
         });
 
         FXGL.getGameScene().addUINode(btnEntrar);
+
+         Button btnAtender = new Button("Atender");
+         btnAtender.setLayoutX(150);
+         btnAtender.setLayoutY(550);
+
+         btnAtender.setOnAction(event -> {
+             System.out.println("Nuevo proceso iniciado, reiniciando cola...");
+         });
+ 
+         FXGL.getGameScene().addUINode(btnAtender);
+
+         Button btnPedido = new Button("Pedido");
+         btnPedido.setLayoutX(250);
+         btnPedido.setLayoutY(550);
+
+         btnPedido.setOnAction(event -> {
+             System.out.println("Nuevo proceso iniciado, reiniciando cola...");
+         });
+ 
+         FXGL.getGameScene().addUINode(btnPedido);
+
+        
     }
 
     @Override
