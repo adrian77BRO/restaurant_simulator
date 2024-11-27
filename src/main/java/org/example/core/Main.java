@@ -8,15 +8,15 @@ public class Main {
     public static void main(String[] args) {
         Restaurante restaurante = new Restaurante();
 
-        int numMeseros = 4;
-        int numCocineros = 6;
+        final int numMeseros = 4;
+        final int numCocineros = 6;
 
         for (int i = 0; i < numMeseros; i++) {
-            new Thread(new Mesero(restaurante), "Mesero-" + i).start();
+            new Thread(new Mesero(restaurante)).start();
         }
 
         for (int i = 0; i < numCocineros; i++) {
-            new Thread(new Cocinero(restaurante), "Cocinero-" + i).start();
+            new Thread(new Cocinero(restaurante)).start();
         }
 
         while (true) {

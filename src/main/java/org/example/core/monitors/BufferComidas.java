@@ -10,7 +10,7 @@ public class BufferComidas {
 
     public synchronized void agregarComida(Orden comida) {
         comidas.add(comida);
-        notify();
+        notifyAll();
     }
 
     public synchronized Orden tomarComida() {

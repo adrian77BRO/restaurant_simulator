@@ -27,13 +27,6 @@ public class Restaurante {
         notifyAll();
     }
 
-    /*public synchronized Comensal obtenerComensal() {
-        if (!comensalesEnEspera.isEmpty()) {
-            return comensalesEnEspera.poll();
-        }
-        return null;
-    }*/
-
     public synchronized Comensal obtenerComensal() {
         return comensalesEnEspera.poll();
     }

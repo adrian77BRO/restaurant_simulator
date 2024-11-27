@@ -30,14 +30,17 @@ public class Mesero implements Runnable {
                         continue;
                     }
                 }
-
                 Orden orden = new Orden(comensal);
                 System.out.println("Mesero " + id + " genera la orden " + orden.getId() + " para el comensal " + comensal.getId() + ".");
                 restaurante.getBufferOrdenes().agregarOrden(orden);
 
                 Orden comidaLista = restaurante.getBufferComidas().tomarComida();
                 if (comidaLista.getEstado() == Orden.EstadoOrden.LISTO) {
+                    Comensal com = comidaLista.getComensal();
                     System.out.println("Mesero " + id + " entrega la comida de la orden " + comidaLista.getId() + " al comensal " + comensal.getId() + ".");
+                    synchronized (com) {
+                        com.recibirComida();
+                    }
                 }
 
                 // Simular tiempo de entrega

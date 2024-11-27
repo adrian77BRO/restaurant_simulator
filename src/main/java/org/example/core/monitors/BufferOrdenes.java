@@ -10,7 +10,7 @@ public class BufferOrdenes {
 
     public synchronized void agregarOrden(Orden orden) {
         ordenes.add(orden);
-        notify();
+        notifyAll();
     }
 
     public synchronized Orden tomarOrden() {

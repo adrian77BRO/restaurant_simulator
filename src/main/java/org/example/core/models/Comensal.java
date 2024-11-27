@@ -8,6 +8,7 @@ public class Comensal implements Runnable {
     private static final AtomicInteger contador = new AtomicInteger(1);
     private final int id;
     private final Restaurante restaurante;
+    private boolean comidaEntregada = false;
 
     public Comensal(Restaurante restaurante) {
         this.restaurante = restaurante;
@@ -16,6 +17,11 @@ public class Comensal implements Runnable {
 
     public int getId() {
         return id;
+    }
+
+    public synchronized void recibirComida() {
+        comidaEntregada = true;
+        notify();
     }
 
     @Override
@@ -33,8 +39,15 @@ public class Comensal implements Runnable {
                 System.out.println("Comensal " + id + " se le asigna una mesa.");
             }
 
+            synchronized (this) {
+                while (!comidaEntregada) {
+                    wait();
+                }
+            }
+
             // Simular tiempo de estancia en el restaurante
             Thread.sleep((long) (Math.random() * 5000)); // Tiempo en el restaurante
+            System.out.println("Comensal " + id + " comiendo...");
 
             synchronized (restaurante) {
                 restaurante.liberarMesa();
