@@ -8,7 +8,7 @@ import javafx.application.Platform;
 import javafx.scene.layout.StackPane;
 
 public class CocinaView {
-    private StackPane view;
+    public StackPane view;
 
     public CocinaView() {
         view = new StackPane();
@@ -32,13 +32,15 @@ public class CocinaView {
         });
     }
     
-    public void removeSpriteById(String id) {
+    public void deshabilitarSprite(String id) {
         Platform.runLater(() -> {
             String nodeId = "sprite-" + id;
             var node = view.lookup("#" + nodeId);
             if (node != null) {
-                view.getChildren().remove(node);
+                node.setVisible(false);
             }
         });
     }
+
+
 }

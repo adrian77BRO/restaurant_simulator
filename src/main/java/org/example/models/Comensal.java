@@ -1,5 +1,6 @@
 package org.example.models;
 
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.example.Restaurante;
@@ -16,7 +17,6 @@ public class Comensal implements Runnable {
     private boolean comidaEntregada = false;
     private final ComedorView comedorView;
     private final RecepcionView recepcionView;
-    private static final Object lock = new Object(); 
 
     public Comensal(Restaurante restaurante, RecepcionView recepcionView, ComedorView comedorView) {
         this.restaurante = restaurante;
@@ -37,33 +37,29 @@ public class Comensal implements Runnable {
     @Override
     public void run() {
         try {
-            System.out.println("Comensal " + id + " ha llegado al restaurante.");
-            SpriteComensal.moverSprite(recepcionView, id);
-
-            synchronized (lock) {
-                lock.wait();
-            }
-
+            System.out.println("Comensal" + id + " ha llegado al restaurante.");
+             CountDownLatch latch = new CountDownLatch(1);            
+            
             synchronized (restaurante) {
                 restaurante.agregarComensalEnEspera(this);
                 while (!restaurante.asignarMesa()) {
-                    System.out.println("Comensal " + id + " esperando mesa disponible.");
+                    System.out.println("Comensal  " + id + " esperando mesa disponible.");
                     restaurante.wait();
                 }
+                SpriteComensal.moverSprite(recepcionView, id, latch);
+                latch.await();
                 
+
                 mesaAsignada = restaurante.getMesas().stream().filter(mesa -> !mesa.isOcupada()).findFirst().orElse(null);
                 
                 if (mesaAsignada != null) {
-                    System.out.println("Comensal " + id + " se le asigna una mesa en la posición: " + mesaAsignada.getPosicion());
-                    int caso = 1;
+                    System.out.println("Comensa " + id + " se le asigna una mesa en la posición: " + mesaAsignada.getPosicion());
                     double a = mesaAsignada.getX();
                     double b = mesaAsignada.getY();
-                    double x = 30;
-                    double y=100;
-                    SpriteComensal.multiPosicion(id, x, y, a, b, recepcionView, comedorView, caso);
+                    SpriteComensal.multiPosicion(id, 0, 100, a, b, recepcionView, comedorView, 1, latch);
                     
                 } else {
-                    System.out.println("Comensal " + id + " no pudo ser asignado a ninguna mesa.");
+                    System.out.println("Comen sal " + id + " no pudo ser asignado a ninguna mesa.");
                 }
             }
 
@@ -72,22 +68,22 @@ public class Comensal implements Runnable {
                     wait();
                 }
             }
+            
 
-            Thread.sleep((long) (Math.random() * 5000));
+            Thread.sleep(100);
             System.out.println("Comensal " + id + " comiendo...");
+            CountDownLatch latch1 = new CountDownLatch(1);  
 
             synchronized (restaurante) {
+                double x = mesaAsignada.getX();
+                double y = mesaAsignada.getY();
+                SpriteComensal.multiPosicion(id, x, y, 0, 100, recepcionView, comedorView, 2, latch1);
+                latch1.await();
                 restaurante.liberarMesa(mesaAsignada);
-                // SpriteComensal.desocuparMesa(id, mesaAsignada, comedorView);
-                int caso = 2;
-                    double x = mesaAsignada.getX();
-                    double y = mesaAsignada.getY();
-                    double a = 30;
-                    double b=100;
-                    SpriteComensal.multiPosicion(id, x, y, a, b, recepcionView, comedorView, caso);
-                restaurante.notify();
             }
+
             System.out.println("Comensal " + id + " ha abandonado el restaurante.");
+            SpriteComensal.multiPosicion(id, 40, 100, 40, 450, recepcionView, comedorView, 3, latch1);
             
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
@@ -97,11 +93,5 @@ public class Comensal implements Runnable {
     @Override
     public String toString() {
         return "Comensal{id=" + id + "}";
-    }
-
-    public static void colaComensal() {
-        synchronized (lock) {
-            lock.notify();
-        }
     }
 }

@@ -1,34 +1,38 @@
 package org.example.utils;
+
 import javafx.animation.AnimationTimer;
+
 import org.example.sprites.SpriteCaminante;
-import org.example.views.CocinaView;
-public class SpriteCocinero {
+import org.example.views.ComedorView;
+import org.example.views.RecepcionView;
 
-     public static void multiPosicion(int id,double x, double y, double a, double b, CocinaView cocinaView, int caso) {
-        System.out.println("id del cocinero "+ id);
-        if (caso == 1) {
-            cocinaView.deshabilitarSprite(id + "coci");
+public class SpriteMesero {
+
+    public static void multiPosicion(int id,double x, double y, double a, double b, RecepcionView recepcionView, ComedorView comedorView, int caso) {
+        if(caso==1){
+            recepcionView.removeSpriteById(id+"aten");
         }
-        if (caso == 2) {
-
-            cocinaView.deshabilitarSprite(id + "ped");
+        if(caso==2){
+            comedorView.removeSpriteById(id+"desp");
         }
-
+        if(caso==3){
+            comedorView.removeSpriteById(id+"pedir");
+        }
         
         SpriteCaminante spriteCaminante = new SpriteCaminante(
-            ImagePaths.COCINERO_1, 
-            ImagePaths.COCINERO_2
+            ImagePaths.CLIENTE_IMAGEN_1, 
+            ImagePaths.CLIENTE_IMAGEN_2
         );
         
         spriteCaminante.getImageView().setLayoutX(x);
         spriteCaminante.getImageView().setLayoutY(y);
 
         if(caso==1){
-            
-            cocinaView.addSprite(id+"ped", spriteCaminante);
+            comedorView.addSprite(id+"ent", spriteCaminante);
+            System.out.println("animacion sentarse id " + id);
         }
         if(caso==2){
-            cocinaView.addSprite(id+"coci", spriteCaminante);
+            comedorView.addSprite(id+"sal", spriteCaminante);
         }
         
         double destinoX = a;  
@@ -52,11 +56,16 @@ public class SpriteCocinero {
                 }
     
                 if (Math.abs(currentX - destinoX) <= 1 && Math.abs(currentY - destinoY) <= 1) {
-                    stop(); 
+                    stop();
+                    if(caso==1){
+                        
+                    }
+                    if (caso==2){
+                        
+                    }
                 }
             }
         }.start();
     }
-    
     
 }

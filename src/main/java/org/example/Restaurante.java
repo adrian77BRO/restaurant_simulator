@@ -24,14 +24,17 @@ public class Restaurante {
     }
 
     public synchronized boolean asignarMesa() {
-         Collections.shuffle(mesas);
-        for (Mesa mesa : mesas) {
-            if (!mesa.isOcupada()) {
-                mesasDisponibles--;
-                mesa.setOcupada(true);
-                return true;
+        if(mesasDisponibles>0){
+            Collections.shuffle(mesas);
+            for (Mesa mesa : mesas) {
+                if (!mesa.isOcupada()) {
+                    mesasDisponibles--;
+                    mesa.setOcupada(true);
+                    return true;
+                }
             }
         }
+         
         return false;
     }
 

@@ -27,7 +27,7 @@ public class Cocinero implements Runnable {
         while (true) {
             try {
                 Orden orden = restaurante.getBufferOrdenes().tomarOrden();
-                SpriteCocinero.multiPosicion(id, 100, 70, 0, 100, cocinaView, 1);
+                SpriteCocinero.multiPosicion(id, 0, 0, 0, 0, cocinaView, 1);
 
                 System.out.println("Cocinero " + id + " está preparando la orden " + orden.getId() + ".");
                 Thread.sleep((long) (Math.random() * 5000));
@@ -46,4 +46,10 @@ public class Cocinero implements Runnable {
     public String toString() {
         return "Cocinero{id=" + id + "}";
     }
+
+    // public double coordenadas(int id){
+    //     if(id==1){
+
+    //     }
+    // }
 }
