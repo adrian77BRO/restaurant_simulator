@@ -70,7 +70,7 @@ public class Comensal implements Runnable {
             }
             
 
-            Thread.sleep(100);
+            Thread.sleep(50);
             System.out.println("Comensal " + id + " comiendo...");
             CountDownLatch latch1 = new CountDownLatch(1);  
 

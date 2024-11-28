@@ -24,32 +24,61 @@ public class Cocinero implements Runnable {
 
     @Override
     public void run() {
+        double[][] posiciones = {
+            {70, 50},
+            {120, 50},
+            {70, 350},
+            {120, 200},
+            {120, 100},
+            {120, 350}      
+        };
+    
         while (true) {
             try {
+                // Elegir una posición aleatoria
+                int indice = (int) (Math.random() * posiciones.length);
+                double[] coordenadas = posiciones[indice];
+
+                SpriteCocinero.multiPosicion(id, coordenadas[0], coordenadas[1], 0, 200, cocinaView, 1);
+                esperarMovimientoCompleto();
+
+                // Tomar la orden
                 Orden orden = restaurante.getBufferOrdenes().tomarOrden();
-                SpriteCocinero.multiPosicion(id, 0, 0, 0, 0, cocinaView, 1);
+                System.out.println("Cocinero " + id + " recibió la orden " + orden.getId() + ".");
+    
+                SpriteCocinero.multiPosicion(id, 0, 200, coordenadas[0], coordenadas[1], cocinaView, 2);
+                esperarMovimientoCompleto();
 
                 System.out.println("Cocinero " + id + " está preparando la orden " + orden.getId() + ".");
                 Thread.sleep((long) (Math.random() * 5000));
-
+    
+    
                 orden.setEstado(Orden.EstadoOrden.LISTO);
-                System.out.println("Cocinero " + id + " terminó la orden " + orden.getId() + ".");
-                SpriteCocinero.multiPosicion(id, 0, 100, 100, 70, cocinaView, 2);
                 restaurante.getBufferComidas().agregarComida(orden);
+    
+                System.out.println("Cocinero " + id + " entregó la orden " + orden.getId() + ".");
+    
+                // Retorno a la posición inicial (ejemplo: posición fija)
+                SpriteCocinero.multiPosicion(id, coordenadas[0], coordenadas[1], 0, 200, cocinaView, 1);
+                esperarMovimientoCompleto();
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
+                return;
             }
         }
     }
+    
+private void esperarMovimientoCompleto() {
+    try {
+        Thread.sleep(500);
+    } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
+    }
+}
 
     @Override
     public String toString() {
         return "Cocinero{id=" + id + "}";
     }
 
-    // public double coordenadas(int id){
-    //     if(id==1){
-
-    //     }
-    // }
 }

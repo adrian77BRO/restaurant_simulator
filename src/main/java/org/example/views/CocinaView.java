@@ -5,13 +5,13 @@ import org.example.sprites.SpriteCaminante;
 import org.example.components.cocina.Isla;
 
 import javafx.application.Platform;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.Pane;
 
 public class CocinaView {
-    public StackPane view;
+    public Pane view;
 
     public CocinaView() {
-        view = new StackPane();
+        view = new Pane();
         view.setPrefSize(200, 450);
         view.setStyle("-fx-background-color: white;");
         Mosaico mosaico = new Mosaico(18, 8, 25);
@@ -20,7 +20,7 @@ public class CocinaView {
         view.getChildren().addAll(mosaico.getMosaico(), isla.getIsla());
     }
 
-    public StackPane getView() {
+    public Pane getView() {
         return view;
     }
 
