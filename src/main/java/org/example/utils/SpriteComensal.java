@@ -1,44 +1,22 @@
 package org.example.utils;
 
 import javafx.animation.AnimationTimer;
-import javafx.scene.image.ImageView;
-import java.util.List;
-import java.util.Random;
-import org.example.components.comedor.Mesa;
-import org.example.models.Comensal;
 import org.example.sprites.SpriteCaminante;
+import org.example.views.ComedorView;
 import org.example.views.RecepcionView;
-import com.almasb.fxgl.dsl.FXGL;
+import org.example.models.Comensal;
 
-import org.example.models.ObservadorEntrada;
+
 
 public class SpriteComensal {
 
     private static final double SEPARACION = 50;
     private static final double INICIO_Y = 450;
-    private static final double ENTRADA = 100;
     private static int cantidadSprites = 0;
 
-    private static ObservadorEntrada observadorEntrada;
-
-    // Este método permite configurar el observador desde fuera (p.ej., en Restaurante)
-    public static void setObservadorEntrada(ObservadorEntrada observador) {
-        observadorEntrada = observador;
-    }
-
-    private static void notificarObservador(int idComensal) {
-        // Notificar al observador cuando un comensal llega
-        if (observadorEntrada != null) {
-            observadorEntrada.notificarComensalLlegado(idComensal);
-        }
-    }
-
-
-    public static void moverSprite(RecepcionView recepcionView, Comensal comensal) {
+    public static void moverSprite(RecepcionView recepcionView, int id) {
+        System.out.println("Comensal " + id + " está en la recepción.");
         int numeroSprite = cantidadSprites;
-        int idComensal = comensal.getId();
-        System.out.println(idComensal);
-
         SpriteCaminante spriteCaminante = new SpriteCaminante(
             ImagePaths.CLIENTE_IMAGEN_1, 
             ImagePaths.CLIENTE_IMAGEN_2 
@@ -46,7 +24,7 @@ public class SpriteComensal {
         spriteCaminante.getImageView().setLayoutX(30);
         spriteCaminante.getImageView().setLayoutY(INICIO_Y);
 
-        recepcionView.addSprite(spriteCaminante);
+        recepcionView.addSprite(id+"col", spriteCaminante);
 
         double destinoY = 100 + (numeroSprite * SEPARACION);  
 
@@ -60,13 +38,9 @@ public class SpriteComensal {
                     currentY -= speed;
                     spriteCaminante.getImageView().setLayoutY(currentY); 
 
-                    if (currentY <= ENTRADA) {
-                        notificarObservador(idComensal); 
-                        stop();
-                    }
-
                 } else {
                     stop(); 
+                    Comensal.colaComensal();
                 }
             }
         }.start();
@@ -74,47 +48,54 @@ public class SpriteComensal {
         cantidadSprites++;
     }
 
-    //el que este en primero va medienate esto a una mesa
-    public static void buscarLugar(List<Mesa> mesas) {
-        SpriteCaminante cliente = new SpriteCaminante(null, null);
-        cliente.iniciarAnimacion();
-
-        ImageView clienteView = cliente.getImageView();
-        clienteView.setLayoutX(100);
-        clienteView.setLayoutY(100);
+    public static void multiPosicion(int id,double x, double y, double a, double b, RecepcionView recepcionView, ComedorView comedorView, int caso) {
+        if(caso==1){
+            recepcionView.removeSpriteById(id+"col");
+        }
+        if(caso==2){
+            comedorView.removeSpriteById(id+"ent");
+        }
         
-        FXGL.getGameScene().addUINode(clienteView);
+        SpriteCaminante spriteCaminante = new SpriteCaminante(
+            ImagePaths.CLIENTE_IMAGEN_1, 
+            ImagePaths.CLIENTE_IMAGEN_2
+        );
+        
+        spriteCaminante.getImageView().setLayoutX(x);
+        spriteCaminante.getImageView().setLayoutY(y);
 
-        Random rand = new Random();
-        Mesa mesaElegida = mesas.get(rand.nextInt(mesas.size()));
-        double destinoX = mesaElegida.getMesa().getLayoutX()+100;
-        double destinoY = mesaElegida.getMesa().getLayoutY();
-        movimientoLugar(clienteView, destinoX, destinoY);
-    }
-
-    private static void movimientoLugar(ImageView clienteView, double destinoX, double destinoY) {
+        if(caso==1){
+            comedorView.addSprite(id+"ent", spriteCaminante);
+        }
+        if(caso==2){
+            comedorView.addSprite(id+"sal", spriteCaminante);
+        }
+        
+        double destinoX = a;  
+        double destinoY = b;  
+        
         new AnimationTimer() {
+            private double currentX = x;
+            private double currentY = y;
+            private double speed = 2;  
+        
             @Override
             public void handle(long now) {
-                double posX = clienteView.getLayoutX();
-                double posY = clienteView.getLayoutY();
-
-                double deltaX = destinoX - posX;
-                double deltaY = destinoY - posY;
-
-                if (Math.abs(deltaX) < 1 && Math.abs(deltaY) < 1) {
-                    clienteView.setLayoutX(destinoX);
-                    clienteView.setLayoutY(destinoY);
-                    stop();
-                } else {
-                    double magnitud = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-                    double direccionX = deltaX / magnitud;
-                    double direccionY = deltaY / magnitud;
-
-                    clienteView.setLayoutX(posX + direccionX * 2); 
-                    clienteView.setLayoutY(posY + direccionY * 2);
+                if (Math.abs(currentX - destinoX) > 1) {
+                    currentX += (currentX < destinoX) ? speed : -speed;
+                    spriteCaminante.getImageView().setLayoutX(currentX);
+                }
+    
+                if (Math.abs(currentY - destinoY) > 1) {
+                    currentY += (currentY < destinoY) ? speed : -speed;
+                    spriteCaminante.getImageView().setLayoutY(currentY);
+                }
+    
+                if (Math.abs(currentX - destinoX) <= 1 && Math.abs(currentY - destinoY) <= 1) {
+                    stop(); 
                 }
             }
         }.start();
     }
+    
 }

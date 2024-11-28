@@ -26,7 +26,7 @@ public class Main extends GameApplication {
         ComedorView comedorView = new ComedorView();
         CocinaView cocinaView = new CocinaView();
 
-        new Thread(() -> Simulacion.createSimulacion(recepcionView)).start(); 
+        new Thread(() -> Simulacion.createSimulacion(recepcionView, comedorView, cocinaView)).start(); 
 
         HBox root = new HBox();
         root.setPrefSize(1000, 600);

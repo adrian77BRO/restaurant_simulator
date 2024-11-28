@@ -12,7 +12,6 @@ public class Mesa {
         mesa = new StackPane();
         ocupada = false;
 
-        // Cargar la imagen de la mesa
         Image mesaImage = new Image(getClass().getResource("/org/example/assets/mesa.png").toExternalForm());
         ImageView imageView = new ImageView(mesaImage);
         imageView.setFitWidth(40);
@@ -24,7 +23,6 @@ public class Mesa {
         return mesa;
     }
 
-    // Métodos para obtener las coordenadas de la mesa
     public double getX() {
         return mesa.getLayoutX();
     }
@@ -33,7 +31,6 @@ public class Mesa {
         return mesa.getLayoutY();
     }
 
-    // Métodos para establecer las coordenadas de la mesa
     public void setX(double x) {
         mesa.setLayoutX(x);
     }
@@ -48,5 +45,9 @@ public class Mesa {
 
     public void setOcupada(boolean ocupada) {
         this.ocupada = ocupada;
+    }
+
+    public String getPosicion() {
+        return "(" + getX() + ", " + getY() + ")";
     }
 }

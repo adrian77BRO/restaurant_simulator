@@ -35,16 +35,29 @@ public class RecepcionView {
         imageView.setFitWidth(50);
         imageView.setFitHeight(50); 
         view.getChildren().add(imageView);
+
     }
 
     public Pane getView() {
         return view;
     }
 
-    public void addSprite(SpriteCaminante spriteCaminante) {
+
+    public void addSprite(String id, SpriteCaminante spriteCaminante) {
         Platform.runLater(() -> {
+            spriteCaminante.getImageView().setId("sprite-" + id);
             view.getChildren().add(spriteCaminante.getImageView());
             spriteCaminante.iniciarAnimacion();
+        });
+    }
+    
+    public void removeSpriteById(String id) {
+        Platform.runLater(() -> {
+            String nodeId = "sprite-" + id;
+            var node = view.lookup("#" + nodeId);
+            if (node != null) {
+                view.getChildren().remove(node);
+            }
         });
     }
 }
