@@ -23,9 +23,10 @@ public class ContenedorMesas {
                 Mesa mesa = new Mesa();
                 grid.add(mesa.getMesa(), col, row);
 
-        
+                
                 mesa.setX(col * 100); 
-                mesa.setY(row * 100); 
+                mesa.setY(row * 100);
+                mesa.setOcupada(false); 
                 mesas.add(mesa);
             }
         }

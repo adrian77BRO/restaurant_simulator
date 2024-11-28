@@ -6,9 +6,11 @@ import javafx.scene.layout.StackPane;
 
 public class Mesa {
     private StackPane mesa;
+    private boolean ocupada;
 
     public Mesa() {
         mesa = new StackPane();
+        ocupada = false;
 
         // Cargar la imagen de la mesa
         Image mesaImage = new Image(getClass().getResource("/org/example/assets/mesa.png").toExternalForm());
@@ -38,5 +40,13 @@ public class Mesa {
 
     public void setY(double y) {
         mesa.setLayoutY(y);
+    }
+
+    public boolean isOcupada() {
+        return ocupada;
+    }
+
+    public void setOcupada(boolean ocupada) {
+        this.ocupada = ocupada;
     }
 }

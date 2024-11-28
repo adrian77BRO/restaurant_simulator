@@ -11,7 +11,7 @@ import java.util.Random;
 public class AccionesCliente {
 
     public static void buscarLugar(List<Mesa> mesas) {
-        SpriteCaminante cliente = new SpriteCaminante();
+        SpriteCaminante cliente = new SpriteCaminante(null, null);
         cliente.iniciarAnimacion();
 
         ImageView clienteView = cliente.getImageView();
@@ -24,10 +24,10 @@ public class AccionesCliente {
         Mesa mesaElegida = mesas.get(rand.nextInt(mesas.size()));
         double destinoX = mesaElegida.getMesa().getLayoutX()+100;
         double destinoY = mesaElegida.getMesa().getLayoutY();
-        moverSprite(clienteView, destinoX, destinoY);
+        movimientoLugar(clienteView, destinoX, destinoY);
     }
 
-    private static void moverSprite(ImageView clienteView, double destinoX, double destinoY) {
+    private static void movimientoLugar(ImageView clienteView, double destinoX, double destinoY) {
         new AnimationTimer() {
             @Override
             public void handle(long now) {

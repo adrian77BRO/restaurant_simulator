@@ -1,10 +1,12 @@
 package org.example.views;
 
+import javafx.application.Platform; 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import org.example.sprites.SpriteCaminante;
 
 public class RecepcionView {
     private Pane view;
@@ -27,17 +29,22 @@ public class RecepcionView {
         view.getChildren().addAll(rectangulo1, rectangulo2);
 
         Image image = new Image(getClass().getResource("/org/example/assets/rec.png").toExternalForm());
-
         ImageView imageView = new ImageView(image);
         imageView.setLayoutX(20);
         imageView.setLayoutY(20);
         imageView.setFitWidth(50);
         imageView.setFitHeight(50); 
-
         view.getChildren().add(imageView);
     }
 
     public Pane getView() {
         return view;
+    }
+
+    public void addSprite(SpriteCaminante spriteCaminante) {
+        Platform.runLater(() -> {
+            view.getChildren().add(spriteCaminante.getImageView());
+            spriteCaminante.iniciarAnimacion();
+        });
     }
 }
