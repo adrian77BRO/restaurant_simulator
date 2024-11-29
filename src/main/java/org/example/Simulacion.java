@@ -15,12 +15,13 @@ public class Simulacion {
     public static void createSimulacion(RecepcionView recepcionView, ComedorView comedorView, CocinaView cocinaView) {
          List<Mesa> mesas = comedorView.getMesas();
         Restaurante restaurante = new Restaurante(mesas);
+        
 
         final int numMeseros = 4;
         final int numCocineros = 6;
 
         for (int i = 0; i < numMeseros; i++) {
-            new Thread(new Mesero(restaurante )).start();
+            new Thread(new Mesero(restaurante, comedorView)).start();
         }
 
         for (int i = 0; i < numCocineros; i++) {

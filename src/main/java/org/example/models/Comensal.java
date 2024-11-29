@@ -29,6 +29,14 @@ public class Comensal implements Runnable {
         return id;
     }
 
+    public double getX() {
+        return mesaAsignada != null ? mesaAsignada.getX() : 0;
+    }
+
+    public double getY() {
+        return mesaAsignada != null ? mesaAsignada.getY() : 0;
+    }
+
     public synchronized void recibirComida() {
         comidaEntregada = true;
         notify();
@@ -37,54 +45,48 @@ public class Comensal implements Runnable {
     @Override
     public void run() {
         try {
-            System.out.println("Comensal" + id + " ha llegado al restaurante.");
-             CountDownLatch latch = new CountDownLatch(1);            
-            
+            System.out.println("Comensal " + id + " ha llegado al restaurante.");
+            CountDownLatch latch = new CountDownLatch(1);
+
             synchronized (restaurante) {
                 restaurante.agregarComensalEnEspera(this);
-                while (!restaurante.asignarMesa()) {
-                    System.out.println("Comensal  " + id + " esperando mesa disponible.");
-                    restaurante.wait();
-                }
-                SpriteComensal.moverSprite(recepcionView, id, latch);
-                latch.await();
-                
 
-                mesaAsignada = restaurante.getMesas().stream().filter(mesa -> !mesa.isOcupada()).findFirst().orElse(null);
-                
-                if (mesaAsignada != null) {
-                    System.out.println("Comensa " + id + " se le asigna una mesa en la posición: " + mesaAsignada.getPosicion());
-                    double a = mesaAsignada.getX();
-                    double b = mesaAsignada.getY();
-                    SpriteComensal.multiPosicion(id, 0, 100, a, b, recepcionView, comedorView, 1, latch);
-                    
-                } else {
-                    System.out.println("Comen sal " + id + " no pudo ser asignado a ninguna mesa.");
+                while ((mesaAsignada = restaurante.asignarMesa()) == null) {
+                    System.out.println("Comensal " + id + " esperando mesa disponible.");
+                    restaurante.wait();
                 }
             }
 
+            System.out.println("Comensal " + id + " se le asigna una mesa en la posición: " + mesaAsignada.getPosicion());
+
+            
+            SpriteComensal.moverSprite(recepcionView, id, latch);
+            latch.await();
+           
+            SpriteComensal.multiPosicion(id, 0, 100, mesaAsignada.getX(), mesaAsignada.getY(), recepcionView, comedorView, 1, latch);
+
+            
             synchronized (this) {
                 while (!comidaEntregada) {
                     wait();
                 }
             }
-            
 
-            Thread.sleep(50);
-            System.out.println("Comensal " + id + " comiendo...");
-            CountDownLatch latch1 = new CountDownLatch(1);  
+            Thread.sleep(5000); 
+            System.out.println("Comensal " + id + " está comiendo...");
 
+            CountDownLatch latch1 = new CountDownLatch(1);
             synchronized (restaurante) {
-                double x = mesaAsignada.getX();
-                double y = mesaAsignada.getY();
-                SpriteComensal.multiPosicion(id, x, y, 0, 100, recepcionView, comedorView, 2, latch1);
+                SpriteComensal.multiPosicion(id, mesaAsignada.getX(), mesaAsignada.getY(), 0, 100, recepcionView, comedorView, 2, latch1);
                 latch1.await();
+
                 restaurante.liberarMesa(mesaAsignada);
             }
 
             System.out.println("Comensal " + id + " ha abandonado el restaurante.");
-            SpriteComensal.multiPosicion(id, 40, 100, 40, 450, recepcionView, comedorView, 3, latch1);
             
+            SpriteComensal.multiPosicion(id, 40, 100, 40, 450, recepcionView, comedorView, 3, latch1);
+
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }

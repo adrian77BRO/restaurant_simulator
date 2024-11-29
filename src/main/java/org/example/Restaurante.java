@@ -16,32 +16,39 @@ public class Restaurante {
     private final BufferOrdenes bufferOrdenes = new BufferOrdenes();
     private final BufferComidas bufferComidas = new BufferComidas();
     private final Queue<Comensal> comensalesEnEspera = new ConcurrentLinkedQueue<>();
-
     private final List<Mesa> mesas;
 
     public Restaurante(List<Mesa> mesas) {
         this.mesas = mesas;
     }
 
-    public synchronized boolean asignarMesa() {
-        if(mesasDisponibles>0){
-            Collections.shuffle(mesas);
-            for (Mesa mesa : mesas) {
-                if (!mesa.isOcupada()) {
-                    mesasDisponibles--;
-                    mesa.setOcupada(true);
-                    return true;
-                }
+    public synchronized Mesa asignarMesa() {
+        while (mesasDisponibles <= 0) {
+            try {
+                wait(); 
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                return null;
             }
         }
-         
-        return false;
+        Collections.shuffle(mesas);
+        for (Mesa mesa : mesas) {
+            if (!mesa.isOcupada()) {
+                mesasDisponibles--;
+                mesa.setOcupada(true);
+                notifyAll();
+                return mesa;
+            }
+        }
+        return null;
     }
 
     public synchronized void liberarMesa(Mesa mesa) {
-        mesa.setOcupada(false);
-        mesasDisponibles++;
-        notifyAll();
+        if (mesa != null && mesa.isOcupada()) {
+            mesa.setOcupada(false);
+            mesasDisponibles++;
+            notifyAll();
+        }
     }
 
     public synchronized Comensal obtenerComensal() {
@@ -55,25 +62,11 @@ public class Restaurante {
         }
     }
 
-    public List<Mesa> getMesas() {
-        return mesas;
-    }
-
     public BufferOrdenes getBufferOrdenes() {
         return bufferOrdenes;
     }
 
     public BufferComidas getBufferComidas() {
         return bufferComidas;
-    }
-
-    
-    public Mesa getMesaAsignada() {
-        for (Mesa mesa : mesas) {
-            if (mesa.isOcupada()) {
-                return mesa;
-            }
-        }
-        return null;
     }
 }

@@ -5,6 +5,7 @@ import org.example.components.comedor.Mesa;
 import org.example.sprites.SpriteCaminante;
 
 import javafx.application.Platform;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
 import java.util.List;
@@ -51,6 +52,24 @@ public class ComedorView {
             }
         });
     }
+
+    public void deshabilitarSprite(String id) {
+        Platform.runLater(() -> {
+            String nodeId = "sprite-" + id;
+            var node = view.lookup("#" + nodeId);
+            if (node != null) {
+                node.setVisible(false);
+            }
+        });
+    }
+    
+    public boolean containsSprite(String id) {
+        String nodeId = "sprite-" + id;
+        var node = view.lookup("#" + nodeId);
+        return node != null;
+    }
+
+    
     
     
 

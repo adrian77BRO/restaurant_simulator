@@ -42,5 +42,15 @@ public class CocinaView {
         });
     }
 
+    public void removeSpriteById(String id) {
+        Platform.runLater(() -> {
+            String nodeId = "sprite-" + id;
+            var node = view.lookup("#" + nodeId);
+            if (node != null) {
+                view.getChildren().remove(node);
+            }
+        });
+    }
+
 
 }

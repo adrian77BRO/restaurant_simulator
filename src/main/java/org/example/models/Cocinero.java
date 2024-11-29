@@ -1,5 +1,6 @@
 package org.example.models;
 
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.example.utils.SpriteCocinero;
 import org.example.views.CocinaView;
@@ -35,22 +36,23 @@ public class Cocinero implements Runnable {
     
         while (true) {
             try {
-                // Elegir una posición aleatoria
                 int indice = (int) (Math.random() * posiciones.length);
                 double[] coordenadas = posiciones[indice];
+                CountDownLatch latch = new CountDownLatch(1);
 
-                SpriteCocinero.multiPosicion(id, coordenadas[0], coordenadas[1], 0, 200, cocinaView, 1);
-                esperarMovimientoCompleto();
+                SpriteCocinero.multiPosicion(id, coordenadas[0], coordenadas[1], 0, 200, cocinaView, 1, latch);
+                latch.await();
+                 
 
-                // Tomar la orden
                 Orden orden = restaurante.getBufferOrdenes().tomarOrden();
                 System.out.println("Cocinero " + id + " recibió la orden " + orden.getId() + ".");
-    
-                SpriteCocinero.multiPosicion(id, 0, 200, coordenadas[0], coordenadas[1], cocinaView, 2);
-                esperarMovimientoCompleto();
+
+                CountDownLatch latch1 = new CountDownLatch(1);
+                SpriteCocinero.multiPosicion(id, 0, 200, coordenadas[0], coordenadas[1], cocinaView, 2, latch1);
+                latch1.await();
 
                 System.out.println("Cocinero " + id + " está preparando la orden " + orden.getId() + ".");
-                Thread.sleep((long) (Math.random() * 5000));
+                Thread.sleep((long) (Math.random() * 2000));
     
     
                 orden.setEstado(Orden.EstadoOrden.LISTO);
@@ -58,9 +60,9 @@ public class Cocinero implements Runnable {
     
                 System.out.println("Cocinero " + id + " entregó la orden " + orden.getId() + ".");
     
-                // Retorno a la posición inicial (ejemplo: posición fija)
-                SpriteCocinero.multiPosicion(id, coordenadas[0], coordenadas[1], 0, 200, cocinaView, 1);
-                esperarMovimientoCompleto();
+                CountDownLatch latch2 = new CountDownLatch(1);
+                SpriteCocinero.multiPosicion(id, coordenadas[0], coordenadas[1], 0, 200, cocinaView, 3, latch2);
+                latch2.await();
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 return;
@@ -68,13 +70,6 @@ public class Cocinero implements Runnable {
         }
     }
     
-private void esperarMovimientoCompleto() {
-    try {
-        Thread.sleep(500);
-    } catch (InterruptedException e) {
-        Thread.currentThread().interrupt();
-    }
-}
 
     @Override
     public String toString() {
