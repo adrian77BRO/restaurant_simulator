@@ -5,7 +5,6 @@ import org.example.components.comedor.Mesa;
 import org.example.sprites.SpriteCaminante;
 
 import javafx.application.Platform;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
 import java.util.List;

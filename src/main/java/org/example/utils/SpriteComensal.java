@@ -37,7 +37,6 @@ public class SpriteComensal {
                 } else {
                     stop();
                     if(currentY==100){
-                        System.out.println("Y=100 para el comensal " + id);
                         latch.countDown();
                     }
                     
@@ -67,7 +66,6 @@ public class SpriteComensal {
 
         if(caso==1){
             comedorView.addSprite(id+"ent", spriteCaminante);
-            System.out.println("animacion sentarse id " + id);
         }
         if(caso==2){
             comedorView.addSprite(id+"sal", spriteCaminante);
@@ -100,7 +98,6 @@ public class SpriteComensal {
                     stop();
                     if (caso==2){
                         if(currentY==100){
-                            System.out.println("Y=100 para el comensal " + id);
                             latch.countDown();
                         }
                     }

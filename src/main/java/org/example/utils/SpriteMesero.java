@@ -29,8 +29,7 @@ public class SpriteMesero {
             comedorView.removeSpriteById(id + "mes2");
             comedorView.removeSpriteById(id + "mes3");
         }
-    
-        // Crear el sprite de acuerdo al caso
+  
         SpriteCaminante spriteCaminante;
         if (caso == 4) {
             spriteCaminante = new SpriteCaminante(
@@ -44,11 +43,10 @@ public class SpriteMesero {
             );
         }
     
-        // Establecer la posición inicial del sprite
+    
         spriteCaminante.getImageView().setLayoutX(x);
         spriteCaminante.getImageView().setLayoutY(y);
     
-        // Agregar el sprite a la vista según el caso
         if (caso == 1) {
             comedorView.addSprite(id + "mes1", spriteCaminante);
         } else if (caso == 2) {

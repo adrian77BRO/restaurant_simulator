@@ -42,9 +42,8 @@ public void run() {
             CountDownLatch latch = new CountDownLatch(1);
             SpriteMesero.moverSprite(comedorView, id, 670, 200, xc, yc,1, latch);
             latch.await();
-            System.out.println("Mesero " + id + " se desplaza a las coordenadas (" + xc + ", " + yc + ") para tomar la orden del comensal " + comensal.getId());
 
-            System.out.println("Mesero " + id + " genera la orden para el comensal " + comensal.getId() + " en las coordenadas (" + xc + ", " + yc + ").");
+            System.out.println("Mesero " + id + " genera la orden para el comensal " + comensal.getId());
 
             
             CountDownLatch latch1 = new CountDownLatch(1);
@@ -62,14 +61,12 @@ public void run() {
                 CountDownLatch latch2 = new CountDownLatch(1);
                 SpriteMesero.moverSprite(comedorView, id, xc, yc, 670, 200,3, latch2);
                 latch2.await();
-                System.out.println("Mesero " + id + " se desplaza a la cocina para recoger la comida de la orden " + comidaLista.getId());
 
                 System.out.println("Mesero " + id + " recoge la comida de la orden " + comidaLista.getId());
                
                 CountDownLatch latch3 = new CountDownLatch(1);
                 SpriteMesero.moverSprite(comedorView, id, 670, 200, xc, yc,4, latch3);
                 latch3.await();
-                System.out.println("Mesero " + id + " se desplaza hacia el comensal " + comidaLista.getComensal().getId() + " para entregar la comida.");
     
                 synchronized (comensal) {
                     comensal.recibirComida();

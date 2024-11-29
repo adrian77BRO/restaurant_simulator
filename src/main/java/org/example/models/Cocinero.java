@@ -46,6 +46,7 @@ public class Cocinero implements Runnable {
 
                 Orden orden = restaurante.getBufferOrdenes().tomarOrden();
                 System.out.println("Cocinero " + id + " recibió la orden " + orden.getId() + ".");
+            
 
                 CountDownLatch latch1 = new CountDownLatch(1);
                 SpriteCocinero.multiPosicion(id, 0, 200, coordenadas[0], coordenadas[1], cocinaView, 2, latch1);

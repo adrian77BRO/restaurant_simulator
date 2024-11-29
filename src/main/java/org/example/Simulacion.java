@@ -10,6 +10,7 @@ import org.example.views.RecepcionView;
 import java.util.List;
 import org.example.utils.PoissonDelay;
 
+
 public class Simulacion {
 
     public static void createSimulacion(RecepcionView recepcionView, ComedorView comedorView, CocinaView cocinaView) {

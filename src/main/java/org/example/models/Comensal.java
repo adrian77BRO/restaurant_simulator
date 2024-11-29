@@ -57,7 +57,7 @@ public class Comensal implements Runnable {
                 }
             }
 
-            System.out.println("Comensal " + id + " se le asigna una mesa en la posición: " + mesaAsignada.getPosicion());
+            System.out.println("Comensal " + id + " se le asigna una mesa");
 
             
             SpriteComensal.moverSprite(recepcionView, id, latch);
