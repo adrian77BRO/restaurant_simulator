@@ -47,8 +47,11 @@ public class Comensal implements Runnable {
         try {
             System.out.println("Comensal " + id + " ha llegado al restaurante.");
             CountDownLatch latch = new CountDownLatch(1);
+            SpriteComensal.moverSprite(recepcionView, id, latch);
+            latch.await();
 
             synchronized (restaurante) {
+                System.out.print("aqui");
                 restaurante.agregarComensalEnEspera(this);
 
                 while ((mesaAsignada = restaurante.asignarMesa()) == null) {
@@ -57,15 +60,11 @@ public class Comensal implements Runnable {
                 }
             }
 
+            CountDownLatch latch2 = new CountDownLatch(1);
+            SpriteComensal.multiPosicion(id, 0, 100, mesaAsignada.getX(), mesaAsignada.getY(), recepcionView, comedorView, 1, latch2);
+            latch2.await();
+
             System.out.println("Comensal " + id + " se le asigna una mesa");
-
-            
-            SpriteComensal.moverSprite(recepcionView, id, latch);
-            latch.await();
-           
-            SpriteComensal.multiPosicion(id, 0, 100, mesaAsignada.getX(), mesaAsignada.getY(), recepcionView, comedorView, 1, latch);
-
-            
             synchronized (this) {
                 while (!comidaEntregada) {
                     wait();
